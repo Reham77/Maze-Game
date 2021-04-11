@@ -1,10 +1,10 @@
-package edu.maze.game;
+package edu.maze.game.entity;
 
 public class Wall {
 
     public Cell from;
     public Cell to;
-    int direction;
+    public int direction;
 
     public Wall(Cell from, Cell to, int direction) {
         this.from = from;

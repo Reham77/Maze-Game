@@ -1,11 +1,11 @@
-package edu.maze.game;
+package edu.maze.game.entity;
 
 public class Board {
     public static final int DOWN = 0, UP = 1, RIGHT = 2, LEFT = 3;
     int rows, cols;
     private boolean[][] isRemoved;
 
-    Board(int rows, int cols) {
+    public Board(int rows, int cols) {
         this.rows = rows;
         this.cols = cols;
         isRemoved = new boolean[(rows * cols) + 30][4];

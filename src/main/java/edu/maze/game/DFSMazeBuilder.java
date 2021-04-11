@@ -1,5 +1,9 @@
 package edu.maze.game;
 
+import edu.maze.game.entity.Board;
+import edu.maze.game.entity.Cell;
+import edu.maze.game.entity.Wall;
+
 import java.util.List;
 import java.util.Random;
 import java.util.Stack;

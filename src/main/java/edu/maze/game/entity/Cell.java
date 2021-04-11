@@ -1,4 +1,4 @@
-package edu.maze.game;
+package edu.maze.game.entity;
 
 public class Cell {
     public int i;
