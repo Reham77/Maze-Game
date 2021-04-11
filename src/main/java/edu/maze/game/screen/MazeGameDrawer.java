@@ -1,10 +1,14 @@
 package edu.maze.game.screen;
 
 import edu.maze.game.bot.BotPlay;
+import edu.maze.game.builder.DFSMazeBuilder;
+import edu.maze.game.builder.KruskalMazeBuilder;
 import edu.maze.game.builder.MazeBuilder;
 import edu.maze.game.builder.PrimMazeBuilder;
 import edu.maze.game.entity.Board;
 import edu.maze.game.entity.Cell;
+import edu.maze.game.screen.HomePageScene.Algorithm;
+import edu.maze.game.screen.HomePageScene.GameMode;
 import javafx.animation.TranslateTransition;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -22,18 +26,26 @@ import java.util.List;
 public abstract class MazeGameDrawer {
     private final int rows;
     private final int cols;
-    private final int gameMode;
+    private final GameMode gameMode;
     protected TranslateTransition translateTransition;
     protected int distance;
     protected Board board;
 
-    public MazeGameDrawer(int rows, int cols, int gameMode) {
+    public MazeGameDrawer(int rows, int cols, GameMode gameMode, Algorithm algorithm) {
         distance = getDistance(rows);
         this.rows = rows;
         this.cols = cols;
         this.gameMode = gameMode;
-        MazeBuilder builder = new PrimMazeBuilder(rows, cols);
-        board = builder.build();
+        board = generateBoard(algorithm);
+    }
+
+    private Board generateBoard(Algorithm algorithm) {
+        MazeBuilder builder = switch (algorithm) {
+            case DFS -> new DFSMazeBuilder(rows, cols);
+            case PRIM -> new PrimMazeBuilder(rows, cols);
+            case KRUSKAL -> new KruskalMazeBuilder(rows, cols);
+        };
+        return builder.build();
     }
 
     private int getDistance(int rows) {
@@ -112,7 +124,7 @@ public abstract class MazeGameDrawer {
 
         Scene scene = new Scene(group, 940, 780, Color.rgb(255, 250, 255));
 
-        if (gameMode == HomePageScene.PLAY)
+        if (gameMode == GameMode.PLAY)
             sceneOnPressAction(scene);
         else {
             BotPlay play = new BotPlay(rows, cols);

@@ -11,10 +11,12 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class HomePageScene {
-    public final static int PLAY = 0, BOT_PLAY = 1;
-    private final String KRUSKAL = "Randomized Kruskal's Algorithm";
-    private final String DFS = "Randomized Depth First Search";
-    private final String PRIM = "Randomized Prim's Algorithm";
+
+    private final String DFS_LABEL = "Randomized Depth First Search";
+    private final String KRUSKAL_LABEL = "Randomized Kruskal's Algorithm";
+    private final String PRIM_LABEL = "Randomized Prim's Algorithm";
+
+    private Algorithm algorithm = Algorithm.DFS;
     private int rows = 8, cols = 8;
 
     private int getGridSize(String selected) {
@@ -25,13 +27,21 @@ public class HomePageScene {
         return 8;
     }
 
+    private Algorithm getAlgorithmType(String selected) {
+        if (selected.equals(DFS_LABEL))
+            return Algorithm.DFS;
+        if (selected.equals(KRUSKAL_LABEL))
+            return Algorithm.KRUSKAL;
+        return Algorithm.PRIM;
+    }
+
     private VBox selectLevelComboBox() {
         VBox vBox = new VBox();
         Label label = new Label("Please Select a Level");
 
         ComboBox level = new ComboBox();
         level.getItems().addAll("Easy", "Medium", "Hard");
-        level.setValue("Easy");//set initial state to Easy
+        level.setValue("Easy"); //set initial state to Easy
         level.valueProperty().addListener((ChangeListener<String>) (observable, oldValue, newValue) -> {
             rows = cols = getGridSize(newValue);
         });
@@ -47,29 +57,28 @@ public class HomePageScene {
         VBox vBox = new VBox();
         Label label = new Label("Please Select Maze Generation Algorithm");
 
-        ComboBox algorithm = new ComboBox();
-        algorithm.getItems().addAll(DFS, KRUSKAL, PRIM);
-        algorithm.setValue(DFS);//set initial state to Easy
-        algorithm.valueProperty().addListener((ChangeListener<String>) (observable, oldValue, newValue) -> {
-            /// todo
+        ComboBox algorithmLabel = new ComboBox();
+        algorithmLabel.getItems().addAll(DFS_LABEL, KRUSKAL_LABEL, PRIM_LABEL);
+        algorithmLabel.setValue(DFS_LABEL); //set initial state to DFS
+        algorithmLabel.valueProperty().addListener((ChangeListener<String>) (observable, oldValue, newValue) -> {
+            algorithm = getAlgorithmType(newValue);
         });
-        algorithm.setMaxWidth(230);
+        algorithmLabel.setMaxWidth(230);
 
         vBox.setSpacing(10);
         vBox.setAlignment(Pos.CENTER);
-        vBox.getChildren().addAll(label, algorithm);
+        vBox.getChildren().addAll(label, algorithmLabel);
         return vBox;
     }
 
-    private Button createStartButton(String text, Stage stage, int gameMode) {
+    private Button createStartButton(String text, Stage stage, GameMode gameMode) {
         Button button = new Button(text);
         button.setMaxWidth(200);
         button.setOnAction(event -> {
-            stage.setScene(new MazeGameScene(rows, cols, gameMode).create(stage));
+            stage.setScene(new MazeGameScene(rows, cols, gameMode, algorithm).create(stage));
         });
         return button;
     }
-
 
     public Scene createHomePageScene(Stage stage) {
         stage.setTitle("Start Game");
@@ -85,8 +94,8 @@ public class HomePageScene {
         hBox.setSpacing(50);
         hBox.setAlignment(Pos.CENTER);
         hBox.setMaxWidth(500);
-        Button startButton = createStartButton("Play Game", stage, PLAY);
-        Button botPlayButton = createStartButton("Bot Play", stage, BOT_PLAY);
+        Button startButton = createStartButton("Play Game", stage, GameMode.PLAY);
+        Button botPlayButton = createStartButton("Bot Play", stage, GameMode.BOT_PLAY);
         hBox.getChildren().addAll(startButton, botPlayButton);
 
         vBox2.getChildren().addAll(level, algorithm, hBox);
@@ -94,5 +103,13 @@ public class HomePageScene {
         Scene scene = new Scene(vBox2, 940, 780);
         scene.getStylesheets().add("style.css");
         return scene;
+    }
+
+    public enum GameMode {
+        PLAY, BOT_PLAY;
+    }
+
+    public enum Algorithm {
+        DFS, KRUSKAL, PRIM
     }
 }

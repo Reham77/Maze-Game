@@ -2,6 +2,8 @@ package edu.maze.game.screen;
 
 import edu.maze.game.entity.Board;
 import edu.maze.game.entity.Cell;
+import edu.maze.game.screen.HomePageScene.Algorithm;
+import edu.maze.game.screen.HomePageScene.GameMode;
 import javafx.animation.Animation;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
@@ -11,8 +13,8 @@ import java.util.List;
 public class MazeGameScene extends MazeGameDrawer {
     private int botMoveIndex;
 
-    public MazeGameScene(int rows, int cols, int gameMode) {
-        super(rows, cols, gameMode);
+    public MazeGameScene(int rows, int cols, GameMode gameMode, Algorithm algorithm) {
+        super(rows, cols, gameMode, algorithm);
     }
 
     protected int getGridIdx(double num) {
