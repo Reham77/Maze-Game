@@ -25,6 +25,7 @@ import java.util.List;
 public class MazeGameScene {
 
     public static int i = 0;
+    static int counter = 0;
 
     private static int getDistance(int rows) {
         if (rows == 8)
@@ -93,42 +94,63 @@ public class MazeGameScene {
         });
     }
 
-    private static void sceneAction(Scene scene, ImageView imageView, int distance, Board board) {
-        TranslateTransition translateTransition = new TranslateTransition();
+    private static void moveMouse(TranslateTransition translateTransition, int distance, int direction, Board board) {
+        if (translateTransition.getStatus().equals(Animation.Status.RUNNING)) {
+            return;
+        }
+        double y = Double.isNaN(translateTransition.getToY()) ? 0 : translateTransition.getToY();
+        double x = Double.isNaN(translateTransition.getToX()) ? 0 : translateTransition.getToX();
+        int i = (int) y / (distance + 5);
+        int j = (int) x / (distance + 5);
+
+        if (direction == Board.UP && board.isWallRemoved(new Cell(i, j), Board.UP)) {
+            translateTransition.setToY(y - (distance + 5));
+        } else if (direction == Board.DOWN && board.isWallRemoved(new Cell(i, j), Board.DOWN)) {
+            translateTransition.setToY(y + (distance + 5));
+        } else if (direction == Board.RIGHT && board.isWallRemoved(new Cell(i, j), Board.RIGHT)) {
+            translateTransition.setToX(x + distance + 5);
+        } else if (direction == Board.LEFT && board.isWallRemoved(new Cell(i, j), Board.LEFT)) {
+            translateTransition.setToX(x - (distance + 5));
+        }
+        translateTransition.play();
+    }
+
+    private static void sceneAction(Scene scene, TranslateTransition imageView, int distance, Board board) {
         scene.setOnKeyPressed(key -> {
-            if (translateTransition.getStatus().equals(Animation.Status.RUNNING)) {
-                return;
-            }
-            double y = imageView.getTranslateY();
-            double x = imageView.getTranslateX();
-
-            translateTransition.setDuration(Duration.millis(200));
-            translateTransition.setNode(imageView);
-
-            int i = (int) y / (distance + 5);
-            int j = (int) x / (distance + 5);
-
             if (key.getCode() == KeyCode.UP) {
-                if (board.isWallRemoved(new Cell(i, j), Board.UP)) {
-                    translateTransition.setToY(y - (distance + 5));
-                }
+                moveMouse(imageView, distance, Board.UP, board);
             } else if (key.getCode() == KeyCode.DOWN) {
-                if (board.isWallRemoved(new Cell(i, j), Board.DOWN)) {
-                    translateTransition.setToY(y + (distance + 5));
-                }
+                moveMouse(imageView, distance, Board.DOWN, board);
             } else if (key.getCode() == KeyCode.RIGHT) {
-                if (board.isWallRemoved(new Cell(i, j), Board.RIGHT)) {
-                    translateTransition.setToX(x + distance + 5);
-                }
+                moveMouse(imageView, distance, Board.RIGHT, board);
             } else if (key.getCode() == KeyCode.LEFT) {
-                if (board.isWallRemoved(new Cell(i, j), Board.LEFT)) {
-                    translateTransition.setToX(x - (distance + 5));
-                }
+                moveMouse(imageView, distance, Board.LEFT, board);
             }
-            translateTransition.play();
         });
     }
 
+    public static void moveBot(TranslateTransition translateTransition, int distance, List<Integer> ls) {
+        counter = ls.size() - 1;
+        translateTransition.setOnFinished(event -> {
+            if (counter == -1) {
+                return;
+            }
+            double y = Double.isNaN(translateTransition.getToY()) ? 0 : translateTransition.getToY();
+            double x = Double.isNaN(translateTransition.getToX()) ? 0 : translateTransition.getToX();
+            if (ls.get(counter) == Board.UP) {
+                translateTransition.setToY(y - (distance + 5));
+            } else if (ls.get(counter) == Board.DOWN) {
+                translateTransition.setToY(y + (distance + 5));
+            } else if (ls.get(counter) == Board.RIGHT) {
+                translateTransition.setToX(x + distance + 5);
+            } else if (ls.get(counter) == Board.LEFT) {
+                translateTransition.setToX(x - (distance + 5));
+            }
+            --counter;
+            translateTransition.play();
+        });
+        translateTransition.play(); // play empty move to invoke OnFinished Method
+    }
 
     public static Scene create(int rows, int cols, Stage stage, int gameMode) throws FileNotFoundException {
         stage.setTitle("Maze Game");
@@ -140,20 +162,16 @@ public class MazeGameScene {
 
         GridPane gridPane = createMazeGrid(board, rows, cols);
         ImageView imageView = Image(getDistance(rows));
+        TranslateTransition translateTransition = new TranslateTransition(Duration.millis(200), imageView);
 
         Scene scene = new Scene(group, 940, 780, Color.rgb(255, 250, 255));
 
         if (gameMode == HomePageScene.PLAY)
-            sceneAction(scene, imageView, getDistance(rows), board);
+            sceneAction(scene, translateTransition, getDistance(rows), board);
         else {
             BotPlay play = new BotPlay(rows, cols);
             List<Integer> ls = play.getPath(board);
-
-
-            for (int i = ls.size() - 1; i >= 0; i--) {
-                System.out.println(ls.get(i));
-            }
-            
+            moveBot(translateTransition, getDistance(rows), ls);
         }
 
         Button button = createStartButton();
@@ -161,13 +179,10 @@ public class MazeGameScene {
         startButtonAction(stage, button);
 
         Group buttons = new Group();
-        buttons.getChildren().
-
-                add(button);
+        buttons.getChildren().add(button);
         gridPane.add(buttons, cols + 2, rows / 3, 1, 3);
 
         group.getChildren().addAll(imageView, gridPane);
-
         //         stage.setResizable(false);
         scene.getStylesheets().add("style.css");
         return scene;
