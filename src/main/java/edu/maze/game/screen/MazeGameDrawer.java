@@ -28,8 +28,8 @@ import javafx.util.Duration;
 import java.util.List;
 
 public abstract class MazeGameDrawer {
-    private final int rows;
-    private final int cols;
+    protected final int rows;
+    protected final int cols;
     private final GameMode gameMode;
     protected TranslateTransition translateTransition;
     protected int distance;
@@ -140,7 +140,7 @@ public abstract class MazeGameDrawer {
         window.show();
     }
 
-    protected abstract void sceneOnPressAction(Scene scene);
+    protected abstract void sceneOnPressAction(Scene scene , Stage stage);
 
     protected abstract void moveBot(List<Integer> directionsList, Stage stage);
 
@@ -156,7 +156,7 @@ public abstract class MazeGameDrawer {
         Scene scene = new Scene(group, 940, 780, Color.rgb(255, 250, 255));
 
         if (gameMode == GameMode.PLAY)
-            sceneOnPressAction(scene);
+            sceneOnPressAction(scene , stage);
         else {
             BotPlay play = new BotPlay(rows, cols);
             List<Integer> directionsList = play.getPath(board);

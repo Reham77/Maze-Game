@@ -22,7 +22,7 @@ public class MazeGameScene extends MazeGameDrawer {
         return ((int) num / (distance + 5));
     }
 
-    private void moveMouse(int direction) {
+    private void moveMouse(int direction, Stage stage) {
         if (translateTransition.getStatus().equals(Animation.Status.RUNNING)) {
             return;
         }
@@ -41,32 +41,38 @@ public class MazeGameScene extends MazeGameDrawer {
             translateTransition.setToX(x - (distance + 5));
         }
         translateTransition.play();
+
+        if (getGridIdx(translateTransition.getToX()) == rows - 1 && getGridIdx(translateTransition.getToY()) == cols - 1) {
+            createAlertBox(stage);
+        }
     }
 
     @Override
-    protected void sceneOnPressAction(Scene scene) {
+    protected void sceneOnPressAction(Scene scene, Stage stage) {
         scene.setOnKeyPressed(key -> {
             if (key.getCode() == KeyCode.UP) {
-                moveMouse(Board.UP);
+                moveMouse(Board.UP, stage);
             } else if (key.getCode() == KeyCode.DOWN) {
-                moveMouse(Board.DOWN);
+                moveMouse(Board.DOWN, stage);
             } else if (key.getCode() == KeyCode.RIGHT) {
-                moveMouse(Board.RIGHT);
+                moveMouse(Board.RIGHT, stage);
             } else if (key.getCode() == KeyCode.LEFT) {
-                moveMouse(Board.LEFT);
+                moveMouse(Board.LEFT, stage);
             }
         });
     }
 
     @Override
-    protected void moveBot(List<Integer> directionsList , Stage stage) {
+    protected void moveBot(List<Integer> directionsList, Stage stage) {
         botMoveIndex = 0;
         translateTransition.setOnFinished(event -> {
+
             if (botMoveIndex == directionsList.size()) {
                 createAlertBox(stage);
                 return;
             }
-            moveMouse(directionsList.get(botMoveIndex));
+
+            moveMouse(directionsList.get(botMoveIndex), stage);
             ++botMoveIndex;
         });
         translateTransition.setToX(0);
