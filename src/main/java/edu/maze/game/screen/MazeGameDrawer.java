@@ -40,11 +40,19 @@ public abstract class MazeGameDrawer {
     }
 
     private Board generateBoard(Algorithm algorithm) {
-        MazeBuilder builder = switch (algorithm) {
-            case DFS -> new DFSMazeBuilder(rows, cols);
-            case PRIM -> new PrimMazeBuilder(rows, cols);
-            case KRUSKAL -> new KruskalMazeBuilder(rows, cols);
-        };
+        MazeBuilder builder;
+        switch (algorithm) {
+            case DFS:
+                builder = new DFSMazeBuilder(rows, cols);
+                break;
+            case PRIM:
+                builder = new PrimMazeBuilder(rows, cols);
+                break;
+            case KRUSKAL:
+            default:
+                builder = new KruskalMazeBuilder(rows, cols);
+                break;
+        }
         return builder.build();
     }
 
