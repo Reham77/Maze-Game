@@ -20,12 +20,12 @@ import javafx.util.Duration;
 import java.util.List;
 
 public abstract class MazeGameDrawer {
+    private final int rows;
+    private final int cols;
+    private final int gameMode;
     protected TranslateTransition translateTransition;
     protected int distance;
     protected Board board;
-    private int rows;
-    private int cols;
-    private int gameMode;
 
     public MazeGameDrawer(int rows, int cols, int gameMode) {
         distance = getDistance(rows);
@@ -46,8 +46,6 @@ public abstract class MazeGameDrawer {
     }
 
     private GridPane createMazeGrid() {
-        int distance = getDistance(rows);
-
         GridPane gridPane = new GridPane();
 
         for (int x = 0; x <= rows; x++) {
@@ -89,22 +87,22 @@ public abstract class MazeGameDrawer {
         return imageView;
     }
 
-    private Button createExitButton() {
-        Button button = new Button("I Quit");
-        button.setMaxWidth(150);
-        button.setFocusTraversable(false);
-        return button;
+    private Button createExitButton(Stage stage) {
+        Button exitButton = new Button("I Quit");
+        exitButton.setMaxWidth(150);
+        exitButton.setFocusTraversable(false);
+        exitButton.setOnAction(event -> {
+            stage.setScene(new HomePageScene().createHomePageScene(stage));
+        });
+        return exitButton;
     }
 
-    protected abstract void exitButtonAction(Stage stage, Button button);
-
-    protected abstract void sceneAction(Scene scene);
+    protected abstract void sceneOnPressAction(Scene scene);
 
     protected abstract void moveBot(List<Integer> directionsList);
 
     public Scene create(Stage stage) {
         stage.setTitle("Maze Game");
-
 
         Group group = new Group();
 
@@ -115,18 +113,17 @@ public abstract class MazeGameDrawer {
         Scene scene = new Scene(group, 940, 780, Color.rgb(255, 250, 255));
 
         if (gameMode == HomePageScene.PLAY)
-            sceneAction(scene);
+            sceneOnPressAction(scene);
         else {
             BotPlay play = new BotPlay(rows, cols);
             List<Integer> directionsList = play.getPath(board);
             moveBot(directionsList);
         }
 
-        Button button = createExitButton();
-        exitButtonAction(stage, button);
+        Button exitButton = createExitButton(stage);
 
         Group buttons = new Group();
-        buttons.getChildren().add(button);
+        buttons.getChildren().add(exitButton);
         gridPane.add(buttons, cols + 2, rows / 3, 1, 3);
 
         group.getChildren().addAll(imageView, gridPane);

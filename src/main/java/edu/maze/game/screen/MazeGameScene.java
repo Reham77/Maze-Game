@@ -4,9 +4,7 @@ import edu.maze.game.entity.Board;
 import edu.maze.game.entity.Cell;
 import javafx.animation.Animation;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
-import javafx.stage.Stage;
 
 import java.util.List;
 
@@ -42,16 +40,8 @@ public class MazeGameScene extends MazeGameDrawer {
         translateTransition.play();
     }
 
-
     @Override
-    protected void exitButtonAction(Stage stage, Button button) {
-        button.setOnAction(event -> {
-            stage.setScene(new HomePageScene().createHomePageScene(stage));
-        });
-    }
-
-    @Override
-    protected void sceneAction(Scene scene) {
+    protected void sceneOnPressAction(Scene scene) {
         scene.setOnKeyPressed(key -> {
             if (key.getCode() == KeyCode.UP) {
                 moveMouse(Board.UP);
@@ -72,20 +62,8 @@ public class MazeGameScene extends MazeGameDrawer {
             if (botMoveIndex == -1) {
                 return;
             }
-            double y = translateTransition.getToY();
-            double x = translateTransition.getToX();
-
-            if (directionsList.get(botMoveIndex) == Board.UP) {
-                translateTransition.setToY(y - (distance + 5));
-            } else if (directionsList.get(botMoveIndex) == Board.DOWN) {
-                translateTransition.setToY(y + (distance + 5));
-            } else if (directionsList.get(botMoveIndex) == Board.RIGHT) {
-                translateTransition.setToX(x + distance + 5);
-            } else if (directionsList.get(botMoveIndex) == Board.LEFT) {
-                translateTransition.setToX(x - (distance + 5));
-            }
+            moveMouse(directionsList.get(botMoveIndex));
             --botMoveIndex;
-            translateTransition.play();
         });
         translateTransition.setToX(0);
         translateTransition.setToY(0);
