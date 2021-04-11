@@ -1,8 +1,8 @@
 package edu.maze.game.screen;
 
-import edu.maze.game.builder.DFSMazeBuilder;
-import edu.maze.game.builder.KruskalMazeBuilder;
+import edu.maze.game.bot.BotPlay;
 import edu.maze.game.builder.MazeBuilder;
+import edu.maze.game.builder.PrimMazeBuilder;
 import edu.maze.game.entity.Board;
 import edu.maze.game.entity.Cell;
 import javafx.animation.Animation;
@@ -20,12 +20,14 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.FileNotFoundException;
+import java.util.List;
 
 public class MazeGameScene {
 
-    public static int counter = 0;
+    public static int i = 0;
+    static int counter = 0;
 
-    public static int getDistance(int rows) {
+    private static int getDistance(int rows) {
         if (rows == 8)
             return 90;
         else if (rows == 14)
@@ -34,21 +36,14 @@ public class MazeGameScene {
             return 35;
     }
 
-    public static Scene create(int rows, int cols, Stage stage) throws FileNotFoundException {
+    private static GridPane createMazeGrid(Board board, int rows, int cols) {
         int distance = getDistance(rows);
 
-        MazeBuilder builder = new KruskalMazeBuilder(rows, cols);
-        Board board = builder.build();
-
-        stage.setTitle("Maze Game");
-
-        Group group = new Group();
         GridPane gridPane = new GridPane();
 
         for (int x = 0; x <= rows; x++) {
             for (int y = 0; y <= cols; y++) {
-                Group stackPane = new Group();
-                // horizontal
+                Group group = new Group();
                 Line horizontal = new Line(0, 0, distance, 0);
                 if (board.isWallRemoved(new Cell(x, y), Board.UP) || y == rows) {
                     horizontal.setStyle("-fx-stroke: #ff0000 ; -fx-stroke-width: 5");
@@ -65,22 +60,15 @@ public class MazeGameScene {
                 } else {
                     vertical.setStyle("-fx-stroke: #022d26 ; -fx-stroke-width: 5");
                 }
-                //          rgb(240,248,255)
-                stackPane.getChildren().addAll(vertical, horizontal);
-                gridPane.add(stackPane, y, x);
+
+                group.getChildren().addAll(vertical, horizontal);
+                gridPane.add(group, y, x);
             }
         }
+        return gridPane;
+    }
 
-        Group g = new Group();
-        Button button = new Button("I Quit");
-        button.setMaxWidth(150);
-        button.setOnAction(event -> {
-            stage.setScene(HomePageScene.createHomePageScene(stage));
-        });
-        button.setFocusTraversable(false);
-        g.getChildren().add(button);
-        gridPane.add(g, cols + 2, rows / 3, 1, 3);
-
+    private static ImageView Image(int distance) throws FileNotFoundException {
         Image image = new Image("file:src/main/resources/mouse.jpg");
         ImageView imageView = new ImageView(image);
         imageView.setX((distance / 10) + 5);
@@ -90,52 +78,113 @@ public class MazeGameScene {
         imageView.setPreserveRatio(true);
         imageView.setFocusTraversable(true);
 
-        group.getChildren().addAll(imageView, gridPane);
+        return imageView;
+    }
+
+    private static Button createStartButton() {
+        Button button = new Button("I Quit");
+        button.setMaxWidth(150);
+        button.setFocusTraversable(false);
+        return button;
+    }
+
+    private static void startButtonAction(Stage stage, Button button) {
+        button.setOnAction(event -> {
+            stage.setScene(HomePageScene.createHomePageScene(stage));
+        });
+    }
+
+    private static void moveMouse(TranslateTransition translateTransition, int distance, int direction, Board board) {
+        if (translateTransition.getStatus().equals(Animation.Status.RUNNING)) {
+            return;
+        }
+        double y = Double.isNaN(translateTransition.getToY()) ? 0 : translateTransition.getToY();
+        double x = Double.isNaN(translateTransition.getToX()) ? 0 : translateTransition.getToX();
+        int i = (int) y / (distance + 5);
+        int j = (int) x / (distance + 5);
+
+        if (direction == Board.UP && board.isWallRemoved(new Cell(i, j), Board.UP)) {
+            translateTransition.setToY(y - (distance + 5));
+        } else if (direction == Board.DOWN && board.isWallRemoved(new Cell(i, j), Board.DOWN)) {
+            translateTransition.setToY(y + (distance + 5));
+        } else if (direction == Board.RIGHT && board.isWallRemoved(new Cell(i, j), Board.RIGHT)) {
+            translateTransition.setToX(x + distance + 5);
+        } else if (direction == Board.LEFT && board.isWallRemoved(new Cell(i, j), Board.LEFT)) {
+            translateTransition.setToX(x - (distance + 5));
+        }
+        translateTransition.play();
+    }
+
+    private static void sceneAction(Scene scene, TranslateTransition imageView, int distance, Board board) {
+        scene.setOnKeyPressed(key -> {
+            if (key.getCode() == KeyCode.UP) {
+                moveMouse(imageView, distance, Board.UP, board);
+            } else if (key.getCode() == KeyCode.DOWN) {
+                moveMouse(imageView, distance, Board.DOWN, board);
+            } else if (key.getCode() == KeyCode.RIGHT) {
+                moveMouse(imageView, distance, Board.RIGHT, board);
+            } else if (key.getCode() == KeyCode.LEFT) {
+                moveMouse(imageView, distance, Board.LEFT, board);
+            }
+        });
+    }
+
+    public static void moveBot(TranslateTransition translateTransition, int distance, List<Integer> ls) {
+        counter = ls.size() - 1;
+        translateTransition.setOnFinished(event -> {
+            if (counter == -1) {
+                return;
+            }
+            double y = Double.isNaN(translateTransition.getToY()) ? 0 : translateTransition.getToY();
+            double x = Double.isNaN(translateTransition.getToX()) ? 0 : translateTransition.getToX();
+            if (ls.get(counter) == Board.UP) {
+                translateTransition.setToY(y - (distance + 5));
+            } else if (ls.get(counter) == Board.DOWN) {
+                translateTransition.setToY(y + (distance + 5));
+            } else if (ls.get(counter) == Board.RIGHT) {
+                translateTransition.setToX(x + distance + 5);
+            } else if (ls.get(counter) == Board.LEFT) {
+                translateTransition.setToX(x - (distance + 5));
+            }
+            --counter;
+            translateTransition.play();
+        });
+        translateTransition.play(); // play empty move to invoke OnFinished Method
+    }
+
+    public static Scene create(int rows, int cols, Stage stage, int gameMode) throws FileNotFoundException {
+        stage.setTitle("Maze Game");
+
+        MazeBuilder builder = new PrimMazeBuilder(rows, cols);
+        Board board = builder.build();
+
+        Group group = new Group();
+
+        GridPane gridPane = createMazeGrid(board, rows, cols);
+        ImageView imageView = Image(getDistance(rows));
+        TranslateTransition translateTransition = new TranslateTransition(Duration.millis(200), imageView);
 
         Scene scene = new Scene(group, 940, 780, Color.rgb(255, 250, 255));
 
-        TranslateTransition translateTransition = new TranslateTransition();
+        if (gameMode == HomePageScene.PLAY)
+            sceneAction(scene, translateTransition, getDistance(rows), board);
+        else {
+            BotPlay play = new BotPlay(rows, cols);
+            List<Integer> ls = play.getPath(board);
+            moveBot(translateTransition, getDistance(rows), ls);
+        }
 
-        scene.setOnKeyPressed(key -> {
-            if (translateTransition.getStatus().equals(Animation.Status.RUNNING)) {
-                System.out.println("Wait!!!");
-                return;
-            }
-            double y = imageView.getTranslateY();
-            double x = imageView.getTranslateX();
+        Button button = createStartButton();
 
-            translateTransition.setDuration(Duration.millis(200));
-            translateTransition.setNode(imageView);
+        startButtonAction(stage, button);
 
-            int indi = (int) y / (distance + 5);
-            int indj = (int) x / (distance + 5);
+        Group buttons = new Group();
+        buttons.getChildren().add(button);
+        gridPane.add(buttons, cols + 2, rows / 3, 1, 3);
 
-            System.out.println(x + " " + y + " " + indi + " " + indj);
-            if (key.getCode() == KeyCode.UP) {
-                if (board.isWallRemoved(new Cell(indi, indj), Board.UP)) {
-                    translateTransition.setToY(y - (distance + 5));
-                }
-            } else if (key.getCode() == KeyCode.DOWN) {
-                if (board.isWallRemoved(new Cell(indi, indj), Board.DOWN)) {
-                    translateTransition.setToY(y + (distance + 5));
-                }
-            } else if (key.getCode() == KeyCode.RIGHT) {
-                if (board.isWallRemoved(new Cell(indi, indj), Board.RIGHT)) {
-                    translateTransition.setToX(x + distance + 5);
-                }
-            } else if (key.getCode() == KeyCode.LEFT) {
-                if (board.isWallRemoved(new Cell(indi, indj), Board.LEFT)) {
-                    translateTransition.setToX(x - (distance + 5));
-                }
-            } else {
-                return;
-            }
-            translateTransition.play();
-            System.out.println("done");
-        });
+        group.getChildren().addAll(imageView, gridPane);
         //         stage.setResizable(false);
         scene.getStylesheets().add("style.css");
         return scene;
     }
-
 }
