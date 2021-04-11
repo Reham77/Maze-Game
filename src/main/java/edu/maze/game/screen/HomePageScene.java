@@ -33,7 +33,7 @@ public class HomePageScene {
     public static void startButtonAction(Button button, Stage stage, int gameMode) {
         button.setOnAction(event -> {
             try {
-                stage.setScene(MazeGameScene.create(rows, cols, stage, gameMode));
+                stage.setScene(new MazeGameScene().create(rows, cols, stage, gameMode));
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
