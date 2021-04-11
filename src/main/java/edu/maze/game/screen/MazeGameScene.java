@@ -34,6 +34,10 @@ public class MazeGameScene {
             return 35;
     }
 
+    private static int getGridIdx(double num, int distance) {
+        return ((int) num / (distance + 5));
+    }
+
     private static GridPane createMazeGrid(Board board, int rows, int cols) {
         int distance = getDistance(rows);
 
@@ -50,7 +54,6 @@ public class MazeGameScene {
                     horizontal.setStyle("-fx-stroke: #0d3b12 ; -fx-stroke-width: 5");
                 }
 
-                // vertical
                 Line vertical = new Line(0, 0, 0, distance);
                 if (board.isWallRemoved(new Cell(x, y), Board.LEFT) || x == cols) {
                     vertical.setStyle("-fx-stroke: #ff0000 ; -fx-stroke-width: 5");
@@ -79,14 +82,14 @@ public class MazeGameScene {
         return imageView;
     }
 
-    private static Button createStartButton() {
+    private static Button createExitButton() {
         Button button = new Button("I Quit");
         button.setMaxWidth(150);
         button.setFocusTraversable(false);
         return button;
     }
 
-    private static void startButtonAction(Stage stage, Button button) {
+    private static void exitButtonAction(Stage stage, Button button) {
         button.setOnAction(event -> {
             stage.setScene(HomePageScene.createHomePageScene(stage));
         });
@@ -98,8 +101,8 @@ public class MazeGameScene {
         }
         double y = Double.isNaN(translateTransition.getToY()) ? 0 : translateTransition.getToY();
         double x = Double.isNaN(translateTransition.getToX()) ? 0 : translateTransition.getToX();
-        int i = (int) y / (distance + 5);
-        int j = (int) x / (distance + 5);
+        int i = getGridIdx(y, distance);
+        int j = getGridIdx(x , distance);
 
         if (direction == Board.UP && board.isWallRemoved(new Cell(i, j), Board.UP)) {
             translateTransition.setToY(y - (distance + 5));
@@ -127,21 +130,23 @@ public class MazeGameScene {
         });
     }
 
-    public static void moveBot(TranslateTransition translateTransition, int distance, List<Integer> ls) {
-        botMoveIndex = ls.size() - 1;
+    public static void moveBot(TranslateTransition translateTransition, int distance, List<Integer> directionsList) {
+
+        botMoveIndex = directionsList.size() - 1;
         translateTransition.setOnFinished(event -> {
             if (botMoveIndex == -1) {
                 return;
             }
             double y = translateTransition.getToY();
             double x = translateTransition.getToX();
-            if (ls.get(botMoveIndex) == Board.UP) {
+
+            if (directionsList.get(botMoveIndex) == Board.UP) {
                 translateTransition.setToY(y - (distance + 5));
-            } else if (ls.get(botMoveIndex) == Board.DOWN) {
+            } else if (directionsList.get(botMoveIndex) == Board.DOWN) {
                 translateTransition.setToY(y + (distance + 5));
-            } else if (ls.get(botMoveIndex) == Board.RIGHT) {
+            } else if (directionsList.get(botMoveIndex) == Board.RIGHT) {
                 translateTransition.setToX(x + distance + 5);
-            } else if (ls.get(botMoveIndex) == Board.LEFT) {
+            } else if (directionsList.get(botMoveIndex) == Board.LEFT) {
                 translateTransition.setToX(x - (distance + 5));
             }
             --botMoveIndex;
@@ -170,13 +175,12 @@ public class MazeGameScene {
             sceneAction(scene, translateTransition, getDistance(rows), board);
         else {
             BotPlay play = new BotPlay(rows, cols);
-            List<Integer> ls = play.getPath(board);
-            moveBot(translateTransition, getDistance(rows), ls);
+            List<Integer> directionsList = play.getPath(board);
+            moveBot(translateTransition, getDistance(rows), directionsList);
         }
 
-        Button button = createStartButton();
-
-        startButtonAction(stage, button);
+        Button button = createExitButton();
+        exitButtonAction(stage, button);
 
         Group buttons = new Group();
         buttons.getChildren().add(button);
