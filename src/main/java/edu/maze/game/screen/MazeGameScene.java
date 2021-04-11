@@ -7,6 +7,7 @@ import edu.maze.game.screen.HomePageScene.GameMode;
 import javafx.animation.Animation;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
+import javafx.stage.Stage;
 
 import java.util.List;
 
@@ -58,10 +59,11 @@ public class MazeGameScene extends MazeGameDrawer {
     }
 
     @Override
-    protected void moveBot(List<Integer> directionsList) {
+    protected void moveBot(List<Integer> directionsList , Stage stage) {
         botMoveIndex = 0;
         translateTransition.setOnFinished(event -> {
             if (botMoveIndex == directionsList.size()) {
+                createAlertBox(stage);
                 return;
             }
             moveMouse(directionsList.get(botMoveIndex));

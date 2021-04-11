@@ -10,14 +10,18 @@ import edu.maze.game.entity.Cell;
 import edu.maze.game.screen.HomePageScene.Algorithm;
 import edu.maze.game.screen.HomePageScene.GameMode;
 import javafx.animation.TranslateTransition;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -117,9 +121,28 @@ public abstract class MazeGameDrawer {
         return exitButton;
     }
 
+    protected void createAlertBox(Stage stage) {
+        Stage window = new Stage();
+        window.initModality(Modality.APPLICATION_MODAL); //to block any interactions with any other windows
+
+        window.setTitle("Congratulations");
+        VBox vBox = new VBox();
+        Label label = new Label("You Won !");
+        Button button = new Button("Play Again");
+        button.setOnAction(event -> {
+            window.close();
+            stage.setScene(new HomePageScene().createHomePageScene(stage));
+        });
+        vBox.setAlignment(Pos.CENTER);
+        vBox.getChildren().addAll(label, button);
+        Scene scene = new Scene(vBox , 300 , 150);
+        window.setScene(scene);
+        window.show();
+    }
+
     protected abstract void sceneOnPressAction(Scene scene);
 
-    protected abstract void moveBot(List<Integer> directionsList);
+    protected abstract void moveBot(List<Integer> directionsList, Stage stage);
 
     public Scene create(Stage stage) {
         stage.setTitle("Maze Game");
@@ -137,7 +160,7 @@ public abstract class MazeGameDrawer {
         else {
             BotPlay play = new BotPlay(rows, cols);
             List<Integer> directionsList = play.getPath(board);
-            moveBot(directionsList);
+            moveBot(directionsList, stage);
         }
 
         Button exitButton = createExitButton(stage);
