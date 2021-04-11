@@ -1,4 +1,4 @@
-package edu.maze.game;
+package edu.maze.game.screen;
 
 import javafx.beans.value.ChangeListener;
 import javafx.geometry.Pos;
@@ -8,6 +8,8 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
+import java.io.FileNotFoundException;
 
 public class HomePageScene {
     private static int rows = 8, cols = 8;
@@ -28,7 +30,11 @@ public class HomePageScene {
 
     public static void startButtonAction(Button button, Stage stage) {
         button.setOnAction(event -> {
-            // do nothing
+            try {
+                stage.setScene(MazeGameScene.create(rows, cols, stage));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
         });
     }
 
