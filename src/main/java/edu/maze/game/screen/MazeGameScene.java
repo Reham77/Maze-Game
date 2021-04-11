@@ -68,7 +68,6 @@ public class MazeGameScene extends MazeGameDrawer {
         translateTransition.setOnFinished(event -> {
 
             if (botMoveIndex == directionsList.size()) {
-                createAlertBox(stage);
                 return;
             }
 
@@ -78,5 +77,8 @@ public class MazeGameScene extends MazeGameDrawer {
         translateTransition.setToX(0);
         translateTransition.setToY(0);
         translateTransition.play(); // play empty move to invoke OnFinished Method
+
+        if (botMoveIndex == directionsList.size())
+            createAlertBox(stage);
     }
 }
