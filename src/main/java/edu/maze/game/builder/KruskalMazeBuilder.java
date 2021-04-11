@@ -9,8 +9,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class KruskalMazeBuilder extends MazeBuilder {
-    private int[] parent = new int[(rows * cols) + 30];
-    private int[] sz = new int[(rows * cols) + 30];
+    private int[] parent = new int[rows * cols + 1];
+    private int[] sz = new int[rows * cols + 1];
 
     private List<Wall> walls;
 
@@ -21,12 +21,6 @@ public class KruskalMazeBuilder extends MazeBuilder {
     @Override
     protected boolean validCell(Cell cell) {
         return inBounds(cell);
-    }
-
-    private void swap(Integer u, Integer v) {
-        Integer temp = u;
-        u = v;
-        v = temp;
     }
 
     private void generateWalls() {
@@ -60,8 +54,13 @@ public class KruskalMazeBuilder extends MazeBuilder {
         v = root(v);
         if (u == v)
             return false;
-        if (sz[u] < sz[v])
-            swap(u, v);
+
+        if (sz[u] < sz[v]) {
+            int temp = u;
+            u = v;
+            v = temp;
+        }
+
         sz[u] += sz[v];
         parent[v] = u;
         return true;
@@ -76,12 +75,12 @@ public class KruskalMazeBuilder extends MazeBuilder {
         Board board = new Board(rows, cols);
         init();
         for (Wall wall : walls) {
-            Cell a = wall.from;
-            Cell b = wall.to;
+            Cell from = wall.from;
+            Cell to = wall.to;
 
-            if (!find(a.getIdx(rows), b.getIdx(rows))) {
-                join(a.getIdx(rows), b.getIdx(rows));
-                board.removeWall(a, wall.direction);
+            if (!find(from.getIdx(rows), to.getIdx(rows))) {
+                join(from.getIdx(rows), to.getIdx(rows));
+                board.removeWall(from, wall.direction);
             }
         }
         return board;
