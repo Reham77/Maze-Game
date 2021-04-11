@@ -59,13 +59,13 @@ public class MazeGameScene extends MazeGameDrawer {
 
     @Override
     protected void moveBot(List<Integer> directionsList) {
-        botMoveIndex = directionsList.size() - 1;
+        botMoveIndex = 0;
         translateTransition.setOnFinished(event -> {
-            if (botMoveIndex == -1) {
+            if (botMoveIndex == directionsList.size()) {
                 return;
             }
             moveMouse(directionsList.get(botMoveIndex));
-            --botMoveIndex;
+            ++botMoveIndex;
         });
         translateTransition.setToX(0);
         translateTransition.setToY(0);

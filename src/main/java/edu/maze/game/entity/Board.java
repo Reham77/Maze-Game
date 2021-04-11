@@ -3,12 +3,16 @@ package edu.maze.game.entity;
 public class Board {
     public static final int DOWN = 0, UP = 1, RIGHT = 2, LEFT = 3;
     int rows, cols;
-    private boolean[][] isRemoved;
+    private final boolean[][] isRemoved;
 
     public Board(int rows, int cols) {
         this.rows = rows;
         this.cols = cols;
         isRemoved = new boolean[(rows * cols) + 30][4];
+    }
+
+    public boolean inBounds(Cell cell) {
+        return (cell.i >= 0 && cell.j >= 0 && cell.i < rows && cell.j < cols);
     }
 
     public void removeWall(Cell cell, int direction) {

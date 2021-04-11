@@ -11,7 +11,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class HomePageScene {
-
     private final String DFS_LABEL = "Randomized Depth First Search";
     private final String KRUSKAL_LABEL = "Randomized Kruskal's Algorithm";
     private final String PRIM_LABEL = "Randomized Prim's Algorithm";

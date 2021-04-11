@@ -20,7 +20,7 @@ public class KruskalMazeBuilder extends MazeBuilder {
 
     @Override
     protected boolean validCell(Cell cell) {
-        return inBounds(cell);
+        return board.inBounds(cell);
     }
 
     private void generateWalls() {
@@ -72,7 +72,6 @@ public class KruskalMazeBuilder extends MazeBuilder {
 
     @Override
     public Board build() {
-        Board board = new Board(rows, cols);
         init();
         for (Wall wall : walls) {
             Cell from = wall.from;

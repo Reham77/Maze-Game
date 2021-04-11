@@ -1,6 +1,5 @@
 package edu.maze.game.builder;
 
-import edu.maze.game.builder.MazeBuilder;
 import edu.maze.game.entity.Board;
 import edu.maze.game.entity.Cell;
 import edu.maze.game.entity.Wall;
@@ -10,8 +9,7 @@ import java.util.Random;
 import java.util.Stack;
 
 public class DFSMazeBuilder extends MazeBuilder {
-
-    private boolean[][] visited;
+    private final boolean[][] visited;
 
     public DFSMazeBuilder(int rows, int cols) {
         super(rows, cols);
@@ -20,19 +18,17 @@ public class DFSMazeBuilder extends MazeBuilder {
 
     @Override
     protected boolean validCell(Cell cell) {
-        return (inBounds(cell) && !visited[cell.i][cell.j]);
+        return (board.inBounds(cell) && !visited[cell.i][cell.j]);
     }
 
     @Override
     public Board build() {
-        Board board = new Board(rows, cols);
         Random random = new Random();
-
         Stack<Cell> Nodes = new Stack<>();
         Nodes.push(new Cell(0, 0));
-
         Cell currCell = new Cell(0, 0);
         visited[0][0] = true;
+
         while (!Nodes.empty()) {
             List<Wall> validOptions = getValidNeighbours(currCell);
 
@@ -49,7 +45,5 @@ public class DFSMazeBuilder extends MazeBuilder {
         }
         return board;
     }
-
 }
-
 

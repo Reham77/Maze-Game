@@ -13,4 +13,14 @@ public class Cell {
         return ((i * cols) + j);
     }
 
+    public Cell getNeighbourCell(int neighbourNum) {
+        if (neighbourNum == Board.DOWN)
+            return new Cell(i + 1, j);
+        else if (neighbourNum == Board.UP)
+            return new Cell(i - 1, j);
+        else if (neighbourNum == Board.RIGHT)
+            return new Cell(i, j + 1);
+        else
+            return new Cell(i, j - 1);
+    }
 }
