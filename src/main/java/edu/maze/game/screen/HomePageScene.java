@@ -30,7 +30,7 @@ public class HomePageScene {
 
     public void startButtonAction(Button button, Stage stage, int gameMode) {
         button.setOnAction(event -> {
-            stage.setScene(new MazeGameScene().create(rows, cols, stage, gameMode));
+            stage.setScene(new MazeGameScene(rows, cols, gameMode).create(stage));
         });
     }
 

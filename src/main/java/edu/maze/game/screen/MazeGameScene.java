@@ -3,7 +3,6 @@ package edu.maze.game.screen;
 import edu.maze.game.entity.Board;
 import edu.maze.game.entity.Cell;
 import javafx.animation.Animation;
-import javafx.animation.TranslateTransition;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
@@ -14,18 +13,22 @@ import java.util.List;
 public class MazeGameScene extends MazeGameDrawer {
     private int botMoveIndex;
 
-    protected int getGridIdx(double num, int distance) {
+    public MazeGameScene(int rows, int cols, int gameMode) {
+        super(rows, cols, gameMode);
+    }
+
+    protected int getGridIdx(double num) {
         return ((int) num / (distance + 5));
     }
 
-    private void moveMouse(TranslateTransition translateTransition, int distance, int direction, Board board) {
+    private void moveMouse(int direction) {
         if (translateTransition.getStatus().equals(Animation.Status.RUNNING)) {
             return;
         }
         double y = Double.isNaN(translateTransition.getToY()) ? 0 : translateTransition.getToY();
         double x = Double.isNaN(translateTransition.getToX()) ? 0 : translateTransition.getToX();
-        int i = getGridIdx(y, distance);
-        int j = getGridIdx(x, distance);
+        int i = getGridIdx(y);
+        int j = getGridIdx(x);
 
         if (direction == Board.UP && board.isWallRemoved(new Cell(i, j), Board.UP)) {
             translateTransition.setToY(y - (distance + 5));
@@ -48,23 +51,22 @@ public class MazeGameScene extends MazeGameDrawer {
     }
 
     @Override
-    protected void sceneAction(Scene scene, TranslateTransition imageView, int distance, Board board) {
+    protected void sceneAction(Scene scene) {
         scene.setOnKeyPressed(key -> {
             if (key.getCode() == KeyCode.UP) {
-                moveMouse(imageView, distance, Board.UP, board);
+                moveMouse(Board.UP);
             } else if (key.getCode() == KeyCode.DOWN) {
-                moveMouse(imageView, distance, Board.DOWN, board);
+                moveMouse(Board.DOWN);
             } else if (key.getCode() == KeyCode.RIGHT) {
-                moveMouse(imageView, distance, Board.RIGHT, board);
+                moveMouse(Board.RIGHT);
             } else if (key.getCode() == KeyCode.LEFT) {
-                moveMouse(imageView, distance, Board.LEFT, board);
+                moveMouse(Board.LEFT);
             }
         });
     }
 
     @Override
-    protected void moveBot(TranslateTransition translateTransition, int distance, List<Integer> directionsList) {
-
+    protected void moveBot(List<Integer> directionsList) {
         botMoveIndex = directionsList.size() - 1;
         translateTransition.setOnFinished(event -> {
             if (botMoveIndex == -1) {

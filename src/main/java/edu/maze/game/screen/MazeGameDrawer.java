@@ -20,6 +20,22 @@ import javafx.util.Duration;
 import java.util.List;
 
 public abstract class MazeGameDrawer {
+    protected TranslateTransition translateTransition;
+    protected int distance;
+    protected Board board;
+    private int rows;
+    private int cols;
+    private int gameMode;
+
+    public MazeGameDrawer(int rows, int cols, int gameMode) {
+        distance = getDistance(rows);
+        this.rows = rows;
+        this.cols = cols;
+        this.gameMode = gameMode;
+        MazeBuilder builder = new PrimMazeBuilder(rows, cols);
+        board = builder.build();
+    }
+
     private int getDistance(int rows) {
         if (rows == 8)
             return 90;
@@ -29,7 +45,7 @@ public abstract class MazeGameDrawer {
             return 35;
     }
 
-    private GridPane createMazeGrid(Board board, int rows, int cols) {
+    private GridPane createMazeGrid() {
         int distance = getDistance(rows);
 
         GridPane gridPane = new GridPane();
@@ -60,7 +76,7 @@ public abstract class MazeGameDrawer {
         return gridPane;
     }
 
-    private ImageView Image(int distance) {
+    private ImageView getMouseImage() {
         Image image = new Image("file:src/main/resources/mouse.jpg");
         ImageView imageView = new ImageView(image);
         imageView.setX((distance / 10) + 5);
@@ -82,31 +98,28 @@ public abstract class MazeGameDrawer {
 
     protected abstract void exitButtonAction(Stage stage, Button button);
 
-    protected abstract void sceneAction(Scene scene, TranslateTransition imageView, int distance, Board board);
+    protected abstract void sceneAction(Scene scene);
 
-    protected abstract void moveBot(TranslateTransition translateTransition, int distance,
-                                    List<Integer> directionsList);
+    protected abstract void moveBot(List<Integer> directionsList);
 
-    public Scene create(int rows, int cols, Stage stage, int gameMode) {
+    public Scene create(Stage stage) {
         stage.setTitle("Maze Game");
 
-        MazeBuilder builder = new PrimMazeBuilder(rows, cols);
-        Board board = builder.build();
 
         Group group = new Group();
 
-        GridPane gridPane = createMazeGrid(board, rows, cols);
-        ImageView imageView = Image(getDistance(rows));
-        TranslateTransition translateTransition = new TranslateTransition(Duration.millis(200), imageView);
+        GridPane gridPane = createMazeGrid();
+        ImageView imageView = getMouseImage();
+        translateTransition = new TranslateTransition(Duration.millis(200), imageView);
 
         Scene scene = new Scene(group, 940, 780, Color.rgb(255, 250, 255));
 
         if (gameMode == HomePageScene.PLAY)
-            sceneAction(scene, translateTransition, getDistance(rows), board);
+            sceneAction(scene);
         else {
             BotPlay play = new BotPlay(rows, cols);
             List<Integer> directionsList = play.getPath(board);
-            moveBot(translateTransition, getDistance(rows), directionsList);
+            moveBot(directionsList);
         }
 
         Button button = createExitButton();
