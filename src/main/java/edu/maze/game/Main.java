@@ -12,7 +12,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        primaryStage.setScene(HomePageScene.createHomePageScene(primaryStage));
+        primaryStage.setScene(new HomePageScene().createHomePageScene(primaryStage));
         primaryStage.show();
     }
 }

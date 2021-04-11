@@ -10,13 +10,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.io.FileNotFoundException;
-
 public class HomePageScene {
-    private static int rows = 8, cols = 8;
-    final static int PLAY = 0, BOTPLAY = 1;
+    public final static int PLAY = 0, BOTPLAY = 1;
+    private int rows = 8, cols = 8;
 
-    private static int getGridSize(String selected) {
+    private int getGridSize(String selected) {
         if (selected.equals("Hard"))
             return 19;
         if (selected.equals("Medium"))
@@ -24,23 +22,19 @@ public class HomePageScene {
         return 8;
     }
 
-    public static void comboBoxAction(ComboBox comboBox) {
+    public void comboBoxAction(ComboBox comboBox) {
         comboBox.valueProperty().addListener((ChangeListener<String>) (observable, oldValue, newValue) -> {
             rows = cols = getGridSize(newValue);
         });
     }
 
-    public static void startButtonAction(Button button, Stage stage, int gameMode) {
+    public void startButtonAction(Button button, Stage stage, int gameMode) {
         button.setOnAction(event -> {
-            try {
-                stage.setScene(new MazeGameScene().create(rows, cols, stage, gameMode));
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+            stage.setScene(new MazeGameScene().create(rows, cols, stage, gameMode));
         });
     }
 
-    private static VBox selectLevelComboBox() {
+    private VBox selectLevelComboBox() {
         VBox vBox = new VBox();
         Label label = new Label("Please Select a level");
 
@@ -59,7 +53,7 @@ public class HomePageScene {
         return vBox;
     }
 
-    private static Button createStartButton(String text, Stage stage, int gameMode) {
+    private Button createStartButton(String text, Stage stage, int gameMode) {
         Button button = new Button(text);
         button.setMaxWidth(200);
         startButtonAction(button, stage, gameMode);
@@ -67,7 +61,7 @@ public class HomePageScene {
     }
 
 
-    public static Scene createHomePageScene(Stage stage) {
+    public Scene createHomePageScene(Stage stage) {
         stage.setTitle("Start Game");
         rows = cols = 8;
         VBox vBox = selectLevelComboBox();

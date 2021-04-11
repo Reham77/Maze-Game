@@ -12,13 +12,13 @@ import javafx.stage.Stage;
 import java.util.List;
 
 public class MazeGameScene extends MazeGameDrawer {
-    private static int botMoveIndex;
+    private int botMoveIndex;
 
-    protected static int getGridIdx(double num, int distance) {
+    protected int getGridIdx(double num, int distance) {
         return ((int) num / (distance + 5));
     }
 
-    private static void moveMouse(TranslateTransition translateTransition, int distance, int direction, Board board) {
+    private void moveMouse(TranslateTransition translateTransition, int distance, int direction, Board board) {
         if (translateTransition.getStatus().equals(Animation.Status.RUNNING)) {
             return;
         }
@@ -43,7 +43,7 @@ public class MazeGameScene extends MazeGameDrawer {
     @Override
     protected void exitButtonAction(Stage stage, Button button) {
         button.setOnAction(event -> {
-            stage.setScene(HomePageScene.createHomePageScene(stage));
+            stage.setScene(new HomePageScene().createHomePageScene(stage));
         });
     }
 

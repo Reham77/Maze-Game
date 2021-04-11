@@ -17,11 +17,10 @@ import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import java.io.FileNotFoundException;
 import java.util.List;
 
 public abstract class MazeGameDrawer {
-    private static int getDistance(int rows) {
+    private int getDistance(int rows) {
         if (rows == 8)
             return 90;
         else if (rows == 14)
@@ -30,7 +29,7 @@ public abstract class MazeGameDrawer {
             return 35;
     }
 
-    private static GridPane createMazeGrid(Board board, int rows, int cols) {
+    private GridPane createMazeGrid(Board board, int rows, int cols) {
         int distance = getDistance(rows);
 
         GridPane gridPane = new GridPane();
@@ -61,7 +60,7 @@ public abstract class MazeGameDrawer {
         return gridPane;
     }
 
-    private static ImageView Image(int distance) {
+    private ImageView Image(int distance) {
         Image image = new Image("file:src/main/resources/mouse.jpg");
         ImageView imageView = new ImageView(image);
         imageView.setX((distance / 10) + 5);
@@ -74,7 +73,7 @@ public abstract class MazeGameDrawer {
         return imageView;
     }
 
-    private static Button createExitButton() {
+    private Button createExitButton() {
         Button button = new Button("I Quit");
         button.setMaxWidth(150);
         button.setFocusTraversable(false);
@@ -88,7 +87,7 @@ public abstract class MazeGameDrawer {
     protected abstract void moveBot(TranslateTransition translateTransition, int distance,
                                     List<Integer> directionsList);
 
-    public Scene create(int rows, int cols, Stage stage, int gameMode) throws FileNotFoundException {
+    public Scene create(int rows, int cols, Stage stage, int gameMode) {
         stage.setTitle("Maze Game");
 
         MazeBuilder builder = new PrimMazeBuilder(rows, cols);
