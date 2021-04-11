@@ -4,6 +4,8 @@ import edu.maze.game.builder.DFSMazeBuilder;
 import edu.maze.game.builder.MazeBuilder;
 import edu.maze.game.entity.Board;
 import edu.maze.game.entity.Cell;
+import javafx.animation.Animation;
+import javafx.animation.TranslateTransition;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -12,14 +14,15 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 public class MazeGameScene {
+
+    public static int counter = 0;
 
     public static int getDistance(int rows) {
         if (rows == 8)
@@ -33,7 +36,6 @@ public class MazeGameScene {
     public static Scene create(int rows, int cols, Stage stage) throws FileNotFoundException {
         int distance = getDistance(rows);
 
-        //        MazeBuilderHelper builder = new KruskalMazeBuilder(rows, cols);
         MazeBuilder builder = new DFSMazeBuilder(rows, cols);
         Board board = builder.build();
 
@@ -76,10 +78,9 @@ public class MazeGameScene {
         });
         button.setFocusTraversable(false);
         g.getChildren().add(button);
-        gridPane.add(g,  cols + 2, rows / 3, 1, 3);
+        gridPane.add(g, cols + 2, rows / 3, 1, 3);
 
         Image image = new Image("file:src/main/resources/mouse.jpg");
-
         ImageView imageView = new ImageView(image);
         imageView.setX((distance / 10) + 5);
         imageView.setY((distance / 10) + 5);
@@ -92,34 +93,47 @@ public class MazeGameScene {
 
         Scene scene = new Scene(group, 940, 780, Color.rgb(255, 250, 255));
 
+        TranslateTransition translateTransition = new TranslateTransition();
+
         scene.setOnKeyPressed(key -> {
-            double y = imageView.getY();
-            double x = imageView.getX();
+            if (translateTransition.getStatus().equals(Animation.Status.RUNNING)) {
+                System.out.println("Wait!!!");
+                return;
+            }
+            double y = imageView.getTranslateY();
+            double x = imageView.getTranslateX();
 
-            int indi = (int) (y - 5) / (distance + 5);
-            int indj = (int) (x - 5) / (distance + 5);
+            translateTransition.setDuration(Duration.millis(200));
+            translateTransition.setNode(imageView);
 
+            int indi = (int) y / (distance + 5);
+            int indj = (int) x / (distance + 5);
+
+            System.out.println(x + " " + y + " " + indi + " " + indj);
             if (key.getCode() == KeyCode.UP) {
                 if (board.isWallRemoved(new Cell(indi, indj), Board.UP)) {
-                    imageView.setY(y - (distance + 5.5));
+                    translateTransition.setToY(y - (distance + 5));
                 }
             } else if (key.getCode() == KeyCode.DOWN) {
                 if (board.isWallRemoved(new Cell(indi, indj), Board.DOWN)) {
-                    imageView.setY(y + (distance + 5.5));
+                    translateTransition.setToY(y + (distance + 5));
                 }
             } else if (key.getCode() == KeyCode.RIGHT) {
                 if (board.isWallRemoved(new Cell(indi, indj), Board.RIGHT)) {
-                    imageView.setX(x + distance + 5);
+                    translateTransition.setToX(x + distance + 5);
                 }
             } else if (key.getCode() == KeyCode.LEFT) {
                 if (board.isWallRemoved(new Cell(indi, indj), Board.LEFT)) {
-                    imageView.setX(x - (distance + 5));
+                    translateTransition.setToX(x - (distance + 5));
                 }
+            } else {
+                return;
             }
+            translateTransition.play();
+            System.out.println("done");
         });
         //         stage.setResizable(false);
         scene.getStylesheets().add("style.css");
-
         return scene;
     }
 
