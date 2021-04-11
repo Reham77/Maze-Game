@@ -23,9 +23,7 @@ import java.io.FileNotFoundException;
 import java.util.List;
 
 public class MazeGameScene {
-
-    public static int i = 0;
-    static int counter = 0;
+    private static int botMoveIndex;
 
     private static int getDistance(int rows) {
         if (rows == 8)
@@ -68,7 +66,7 @@ public class MazeGameScene {
         return gridPane;
     }
 
-    private static ImageView Image(int distance) throws FileNotFoundException {
+    private static ImageView Image(int distance) {
         Image image = new Image("file:src/main/resources/mouse.jpg");
         ImageView imageView = new ImageView(image);
         imageView.setX((distance / 10) + 5);
@@ -130,25 +128,27 @@ public class MazeGameScene {
     }
 
     public static void moveBot(TranslateTransition translateTransition, int distance, List<Integer> ls) {
-        counter = ls.size() - 1;
+        botMoveIndex = ls.size() - 1;
         translateTransition.setOnFinished(event -> {
-            if (counter == -1) {
+            if (botMoveIndex == -1) {
                 return;
             }
-            double y = Double.isNaN(translateTransition.getToY()) ? 0 : translateTransition.getToY();
-            double x = Double.isNaN(translateTransition.getToX()) ? 0 : translateTransition.getToX();
-            if (ls.get(counter) == Board.UP) {
+            double y = translateTransition.getToY();
+            double x = translateTransition.getToX();
+            if (ls.get(botMoveIndex) == Board.UP) {
                 translateTransition.setToY(y - (distance + 5));
-            } else if (ls.get(counter) == Board.DOWN) {
+            } else if (ls.get(botMoveIndex) == Board.DOWN) {
                 translateTransition.setToY(y + (distance + 5));
-            } else if (ls.get(counter) == Board.RIGHT) {
+            } else if (ls.get(botMoveIndex) == Board.RIGHT) {
                 translateTransition.setToX(x + distance + 5);
-            } else if (ls.get(counter) == Board.LEFT) {
+            } else if (ls.get(botMoveIndex) == Board.LEFT) {
                 translateTransition.setToX(x - (distance + 5));
             }
-            --counter;
+            --botMoveIndex;
             translateTransition.play();
         });
+        translateTransition.setToX(0);
+        translateTransition.setToY(0);
         translateTransition.play(); // play empty move to invoke OnFinished Method
     }
 
