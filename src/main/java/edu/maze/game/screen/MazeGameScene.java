@@ -1,6 +1,7 @@
 package edu.maze.game.screen;
 
 import edu.maze.game.builder.DFSMazeBuilder;
+import edu.maze.game.builder.KruskalMazeBuilder;
 import edu.maze.game.builder.MazeBuilder;
 import edu.maze.game.entity.Board;
 import edu.maze.game.entity.Cell;
@@ -36,7 +37,7 @@ public class MazeGameScene {
     public static Scene create(int rows, int cols, Stage stage) throws FileNotFoundException {
         int distance = getDistance(rows);
 
-        MazeBuilder builder = new DFSMazeBuilder(rows, cols);
+        MazeBuilder builder = new KruskalMazeBuilder(rows, cols);
         Board board = builder.build();
 
         stage.setTitle("Maze Game");

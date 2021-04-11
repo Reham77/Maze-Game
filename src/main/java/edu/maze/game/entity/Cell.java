@@ -9,7 +9,7 @@ public class Cell {
         this.j = j;
     }
 
-    int getIdx(int cols) {
+    public int getIdx(int cols) {
         return ((i * cols) + j);
     }
 
