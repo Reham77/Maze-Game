@@ -1,4 +1,4 @@
-package edu.maze.game;
+package edu.maze.game.builder;
 
 import edu.maze.game.entity.Board;
 import edu.maze.game.entity.Cell;
@@ -12,7 +12,7 @@ public class DFSMazeBuilder extends MazeBuilder {
 
     private boolean[][] visited;
 
-    DFSMazeBuilder(int rows, int cols) {
+    public DFSMazeBuilder(int rows, int cols) {
         super(rows, cols);
         visited = new boolean[rows + 2][cols + 2];
     }
