@@ -1,6 +1,6 @@
 package edu.maze.game.builder;
 
-import edu.maze.game.MazeBuilder;
+import edu.maze.game.builder.MazeBuilder;
 import edu.maze.game.entity.Board;
 import edu.maze.game.entity.Cell;
 import edu.maze.game.entity.Wall;

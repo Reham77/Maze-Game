@@ -1,6 +1,6 @@
 package edu.maze.game;
 
-import edu.maze.game.builder.HomePageScene;
+import edu.maze.game.screen.HomePageScene;
 import javafx.application.Application;
 import javafx.stage.Stage;
 

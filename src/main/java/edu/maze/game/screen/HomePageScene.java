@@ -1,4 +1,4 @@
-package edu.maze.game.builder;
+package edu.maze.game.screen;
 
 import javafx.beans.value.ChangeListener;
 import javafx.geometry.Pos;
