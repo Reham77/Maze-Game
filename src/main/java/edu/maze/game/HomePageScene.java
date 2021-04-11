@@ -70,6 +70,7 @@ public class HomePageScene {
         vBox2.getChildren().addAll(vBox, startButton);
 
         Scene scene = new Scene(vBox2, 940, 780);
+        scene.getStylesheets().add("style.css");
         return scene;
     }
 
