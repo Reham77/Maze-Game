@@ -18,6 +18,10 @@ public class MazeGameScene extends MazeGameDrawer {
         super(rows, cols, gameMode, algorithm);
     }
 
+    boolean isWinning() {
+        return (getGridIdx(translateTransition.getToX()) == rows - 1 && getGridIdx(translateTransition.getToY()) == cols - 1);
+    }
+
     protected int getGridIdx(double num) {
         return ((int) num / (distance + 5));
     }
@@ -42,7 +46,7 @@ public class MazeGameScene extends MazeGameDrawer {
         }
         translateTransition.play();
 
-        if (getGridIdx(translateTransition.getToX()) == rows - 1 && getGridIdx(translateTransition.getToY()) == cols - 1) {
+        if (isWinning()) {
             createAlertBox(stage);
         }
     }
@@ -66,11 +70,9 @@ public class MazeGameScene extends MazeGameDrawer {
     protected void moveBot(List<Integer> directionsList, Stage stage) {
         botMoveIndex = 0;
         translateTransition.setOnFinished(event -> {
-
             if (botMoveIndex == directionsList.size()) {
                 return;
             }
-
             moveMouse(directionsList.get(botMoveIndex), stage);
             ++botMoveIndex;
         });
