@@ -3,7 +3,7 @@
 JavaFX application generates Mazes using different algorithms, solves the maze using BFS algorithm and lets the user
 play.
 
-## Building this connector project ##
+## Building this project ##
 
 To build this project, the following dependencies must be met
 
