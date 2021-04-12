@@ -1,49 +1,54 @@
 .combo-box-base {
-    -fx-border-radius: 5 , 5 , 5 , 5;
+    -fx-border-radius: 10, 10, 10, 10;
     -fx-font-family: "Arial Rounded MT Bold";
     -fx-border-color: #8596a9;
-    -fx-background-color: #F0F8FF;
+    -fx-background-color: white;
+    -fx-background-radius: 3px, 3px, 2px, 1px;
+    -fx-padding: 4, 8, 4, 8;
+    -fx-text-fill: black;
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+    -fx-font-size: 13;
 }
 
-.combo-box .combo-box-popup .list-view, .combo-box .combo-box-popup .list-cell {
-    -fx-background-color: white;
-    -fx-text-fill: black;
-    -fx-font-family: "Arial Rounded MT Bold";
-
+.combo-box:hover {
+    -fx-background-color: #F0F8FF;
 }
 
 .combo-box .combo-box-popup .list-cell:hover {
     -fx-text-fill: white;
     -fx-background-color: #778899;
+    -fx-font-family: "Arial Rounded MT Bold";
 }
 
 
 .label {
-    -fx-font-family: "Bookman Old Style";
+    -fx-font-size: 14;
+    -fx-font-family: sans-serif;
     -fx-font-weight: BOLD;
 }
 
 .button {
-    -fx-padding: 8 15 15 15;
-    -fx-background-insets: 0, 0 0 5 0, 0 0 6 0, 0 0 7 0;
-    -fx-background-radius: 15;
+    -fx-font-family: "Arial Rounded MT Bold";
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-padding: 7 12 12 12;
+    -fx-background-insets: 0, 0 0 4 0, 0 0 5 0, 0 0 6 0;
+    -fx-background-radius: 8;
     -fx-background-color: linear-gradient(from 0% 93% to 0% 100%, #226f62 0%, #1e5a4e 100%),
     #2c9183,
     #2b7163,
     radial-gradient(center 50% 50%, radius 100%, #37a597, #37b1a0);
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.75), 4, 0, 0, 1);
-    -fx-font-weight: bold;
-    -fx-font-size: 1.1em;
+    -fx-effect: dropshadow(gaussian, rgba(8, 78, 0, 0.75), 4, 0, 0, 1);
+    -fx-font-size: 1.3em;
 }
 
 .button:hover {
+    -fx-text-fill: #eaeaea;
     -fx-background-insets: 0, 0 0 0 0, 0 0 0 0, 0 0 0 0;
-
 }
 
 .VBox {
     -fx-background-color: rgb(240, 248, 255);
     -fx-padding: 0, 20, 10, 20;
     -fx-spacing: 50;
-
 }

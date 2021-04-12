@@ -36,7 +36,7 @@ public class HomePageScene {
 
     private VBox selectLevelComboBox() {
         VBox vBox = new VBox();
-        Label label = new Label("Please Select a Level");
+        Label label = new Label("Select a Difficulty");
 
         ComboBox level = new ComboBox();
         level.getItems().addAll("Easy", "Medium", "Hard");
@@ -55,7 +55,7 @@ public class HomePageScene {
 
     private VBox selectAlgorithmComboBox() {
         VBox vBox = new VBox();
-        Label label = new Label("Please Select Maze Generation Algorithm");
+        Label label = new Label("Select a Maze Generation Algorithm");
 
         ComboBox algorithmLabel = new ComboBox();
         algorithmLabel.getItems().addAll(DFS_LABEL, KRUSKAL_LABEL, PRIM_LABEL);
