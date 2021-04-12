@@ -111,6 +111,17 @@ public abstract class MazeGameDrawer {
         return imageView;
     }
 
+    private ImageView getCheeseImage() {
+        Image image = new Image("file:src/main/resources/cheese.jpg");
+        ImageView imageView = new ImageView(image);
+        imageView.setX((distance + 5) * (rows - 1));
+        imageView.setY((distance + 5) * (cols - 1));
+        imageView.setFitHeight(distance + 5);
+        imageView.setFitWidth(distance + 5);
+        imageView.setPreserveRatio(true);
+        return imageView;
+    }
+
     private Button createExitButton(Stage stage) {
         Button exitButton = new Button("I Quit");
         exitButton.setMaxWidth(150);
@@ -134,13 +145,15 @@ public abstract class MazeGameDrawer {
             stage.setScene(new HomePageScene().createHomePageScene(stage));
         });
         vBox.setAlignment(Pos.CENTER);
+        vBox.setSpacing(10);
         vBox.getChildren().addAll(label, button);
-        Scene scene = new Scene(vBox , 300 , 150);
+        Scene scene = new Scene(vBox, 300, 150);
+        scene.getStylesheets().add("style.css");
         window.setScene(scene);
         window.show();
     }
 
-    protected abstract void sceneOnPressAction(Scene scene , Stage stage);
+    protected abstract void sceneOnPressAction(Scene scene, Stage stage);
 
     protected abstract void moveBot(List<Integer> directionsList, Stage stage);
 
@@ -156,7 +169,7 @@ public abstract class MazeGameDrawer {
         Scene scene = new Scene(group, 940, 780, Color.rgb(255, 250, 255));
 
         if (gameMode == GameMode.PLAY)
-            sceneOnPressAction(scene , stage);
+            sceneOnPressAction(scene, stage);
         else {
             BotPlay play = new BotPlay(rows, cols);
             List<Integer> directionsList = play.getPath(board);
@@ -169,8 +182,8 @@ public abstract class MazeGameDrawer {
         buttons.getChildren().add(exitButton);
         gridPane.add(buttons, cols + 2, rows / 3, 1, 3);
 
-        group.getChildren().addAll(imageView, gridPane);
-        //         stage.setResizable(false);
+        group.getChildren().addAll(getCheeseImage(), imageView, gridPane);
+        stage.setResizable(false);
         scene.getStylesheets().add("style.css");
         return scene;
     }

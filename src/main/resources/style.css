@@ -1,7 +1,7 @@
 .combo-box-base {
-    -fx-background-insets: 0 0 0 0, 0, 0, 0;
+    -fx-border-radius: 5 , 5 , 5 , 5;
     -fx-font-family: "Arial Rounded MT Bold";
-    -fx-border-color: black;
+    -fx-border-color: #8596a9;
     -fx-background-color: #F0F8FF;
 }
 
@@ -9,12 +9,14 @@
     -fx-background-color: white;
     -fx-text-fill: black;
     -fx-font-family: "Arial Rounded MT Bold";
+
 }
 
 .combo-box .combo-box-popup .list-cell:hover {
-    -fx-text-fill: yellow;
-    -fx-background-color: black;
+    -fx-text-fill: white;
+    -fx-background-color: #778899;
 }
+
 
 .label {
     -fx-font-family: "Bookman Old Style";
