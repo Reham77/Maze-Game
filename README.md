@@ -26,11 +26,11 @@ In **Run >> Edit Configurations** Add this line to **VM Options**:
 <pre>
  - Pick a random cell and mark it as visited,then push that cell to a stack
  - While there are cells in the stack:
-       - If the current cell has any valid neighbours:   
-            - Pick a random neighbour,remove the wall that divdies between the current cell and that neighbour
-            - Mark the chosen neighboring cell to be vistited 
-            - Set the neighboring cell to be the current cell
-       - Else delete the current cell from the stack then set the top cell on the stack to be the current cell  
+      - If the current cell has any valid neighbours:   
+          - Pick a random neighbour,remove the wall that divdies between the current cell and that neighbour
+          - Mark the chosen neighboring cell to be vistited 
+          - Set the neighboring cell to be the current cell
+      - Else delete the current cell from the stack then set the top cell on the stack to be the current cell  
 </pre>
 
 * ### Randomized Kruskal algorithm ###
@@ -53,7 +53,7 @@ In **Run >> Edit Configurations** Add this line to **VM Options**:
 </pre>
 
 ## Bot Play ##
- * ### The Maze is solved using Breadth First Search algorithm ### 
+ * ### The Bot solves the Maze using Breadth First Search algorithm ### 
 
 <pre>
  - Push the starting cell to a queue
@@ -62,11 +62,13 @@ In **Run >> Edit Configurations** Add this line to **VM Options**:
       - Add all of its valid neighbours to the queue
       - Mark each valid neighbour to be visisted 
       - Keep track of the parent cell of each neighbour
-      - delete the front cell from the queue 
+      - Delete the front cell from the queue 
 </pre>
 </br>
 
 ## Game Sample ##
 
-***NOTE: Use the keyboard arrows to control the mouse movement***
+***NOTE: Use the keyboard arrows to control the mouse movement **OR** watch the bot solves the Maze***
 
+![](https://media.giphy.com/media/Y114qkzL236gvDqp9q/giphy.gif)
+![](https://media.giphy.com/media/TclpVH86Gz7x3gzvZc/giphy.gif)
