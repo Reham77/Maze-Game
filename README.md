@@ -1,6 +1,6 @@
 # Maze Game
 
-JavaFX application generates Mazes using different algorithms, solves the maze using BFS algorithm and lets the user
+JavaFX application generates Mazes using different algorithms, solves the maze using Breadth First Search algorithm and lets the user
 play.
 
 ## Building this project ##
@@ -24,7 +24,7 @@ In **Run >> Edit Configurations** Add this line to **VM Options**:
 * ### Randomized Iterative Depth First Search algorithm ###
 
 <pre>
- - Pick a random cell and mark it as visited , then push that cell to a stack
+ - Pick a random cell and mark it as visited,then push that cell to a stack
  - While there are cells in the stack:
          - If the current cell has any valid neighbours:   
               - Pick a random neighbour,remove the wall that divdies between the current cell and that neighbour
@@ -49,6 +49,25 @@ In **Run >> Edit Configurations** Add this line to **VM Options**:
           - if one of the two cells that the current wall divides is not marked visited:
                - remove the current wall then add all of the not visited cell's valid walls to the list of walls
           - Mark the cells that the wall divides as visited 
-          - Remove the current wall from the list of walls
+          - Delete the current wall from the list of walls
 </pre>
 
+## Bot Play ##
+ * ### The Maze is solved using Breadth First Search algorithm ### 
+
+<pre>
+ - Push the starting cell to a queue
+ - While there are cells in the queue or the current cell is not equal to the distination cell:
+      - Set the front cell of the queue to be the current cell
+      - Add all of its valid neighbours to the queue
+      - Mark each valid neighbour to be visisted 
+      - Keep track of the parent cell of each neighbour
+      - delete the front cell from the queue 
+</pre>
+</br>
+
+## Game Sample ##
+
+***NOTE: Use the keyboard arrows to control the mouse movement***
+
+![](https://media.giphy.com/media/Y114qkzL236gvDqp9q/giphy.gif)
