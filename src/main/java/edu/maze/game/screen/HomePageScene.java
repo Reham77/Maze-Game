@@ -45,7 +45,7 @@ public class HomePageScene {
             rows = cols = getGridSize(newValue);
         });
 
-        level.setMaxWidth(245);
+        level.setMaxWidth(280);
 
         vBox.setSpacing(10);
         vBox.setAlignment(Pos.CENTER);
@@ -63,7 +63,7 @@ public class HomePageScene {
         algorithmLabel.valueProperty().addListener((ChangeListener<String>) (observable, oldValue, newValue) -> {
             algorithm = getAlgorithmType(newValue);
         });
-        algorithmLabel.setMaxWidth(245);
+        algorithmLabel.setMaxWidth(280);
 
         vBox.setSpacing(10);
         vBox.setAlignment(Pos.CENTER);
