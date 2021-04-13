@@ -70,5 +70,4 @@ In **Run >> Edit Configurations** Add this line to **VM Options**:
 
 ***NOTE: Use the keyboard arrows to control the mouse movement **OR** watch the bot solves the Maze***
 
-![](https://media.giphy.com/media/Y114qkzL236gvDqp9q/giphy.gif)
-![](https://media.giphy.com/media/TclpVH86Gz7x3gzvZc/giphy.gif)
+![](https://media.giphy.com/media/q51ELHltOuq8M0av7y/giphy.gif)
