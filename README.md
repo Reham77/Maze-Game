@@ -70,4 +70,3 @@ In **Run >> Edit Configurations** Add this line to **VM Options**:
 
 ***NOTE: Use the keyboard arrows to control the mouse movement***
 
-![](https://media.giphy.com/media/Y114qkzL236gvDqp9q/giphy.gif)
