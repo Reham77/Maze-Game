@@ -1,8 +1,6 @@
 # Maze Game
 
-JavaFX application generates mazes using Randomized Iterative Depth First Search, Kruskal and Prim algorithms, solves the maze using Breadth First Search algorithm, or lets the user play
-
-play.
+JavaFX application generates mazes using Randomized Iterative Depth First Search, Kruskal and Prim algorithms, solves the maze using Breadth First Search algorithm, or lets the user play.
 
 ## Building this project ##
 
@@ -28,8 +26,8 @@ In **Run >> Edit Configurations** Add this line to **VM Options**:
  - Pick a random cell and mark it as visited,then push that cell to a stack
  - While there are cells in the stack:
       - If the current cell has any valid neighbours:   
-          - Pick a random neighbour,remove the wall that divdies between the current cell and that neighbour
-          - Mark the chosen neighboring cell to be vistited 
+          - Pick a random neighbour,remove the wall that divides between the current cell and that neighbour
+          - Mark the chosen neighboring cell to be visited
           - Set the neighboring cell to be the current cell
       - Else delete the current cell from the stack then set the top cell on the stack to be the current cell  
 </pre>
@@ -61,11 +59,11 @@ In **Run >> Edit Configurations** Add this line to **VM Options**:
  - While there are cells in the queue or the current cell is not equal to the distination cell:
       - Set the front cell of the queue to be the current cell
       - Add all of its valid neighbours to the queue
-      - Mark each valid neighbour to be visisted 
+      - Mark each valid neighbour to be visited 
       - Keep track of the parent cell of each neighbour
       - Delete the front cell from the queue 
 </pre>
-</br>
+<br/>
 
 ## Game Sample ##
 
