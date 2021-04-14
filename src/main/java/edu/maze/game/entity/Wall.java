@@ -1,7 +1,6 @@
 package edu.maze.game.entity;
 
 public class Wall {
-
     public Cell from;
     public Cell to;
     public int direction;

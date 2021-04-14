@@ -10,13 +10,15 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.io.FileNotFoundException;
-
 public class HomePageScene {
-    private static int rows = 8, cols = 8;
-    final static int PLAY = 0, BOTPLAY = 1;
+    private final String DFS_LABEL = "Randomized Depth First Search";
+    private final String KRUSKAL_LABEL = "Randomized Kruskal's Algorithm";
+    private final String PRIM_LABEL = "Randomized Prim's Algorithm";
 
-    private static int getGridSize(String selected) {
+    private Algorithm algorithm = Algorithm.DFS;
+    private int rows = 8, cols = 8;
+
+    private int getGridSize(String selected) {
         if (selected.equals("Hard"))
             return 19;
         if (selected.equals("Medium"))
@@ -24,70 +26,90 @@ public class HomePageScene {
         return 8;
     }
 
-    public static void comboBoxAction(ComboBox comboBox) {
-        comboBox.valueProperty().addListener((ChangeListener<String>) (observable, oldValue, newValue) -> {
-            rows = cols = getGridSize(newValue);
-        });
+    private Algorithm getAlgorithmType(String selected) {
+        if (selected.equals(DFS_LABEL))
+            return Algorithm.DFS;
+        if (selected.equals(KRUSKAL_LABEL))
+            return Algorithm.KRUSKAL;
+        return Algorithm.PRIM;
     }
 
-    public static void startButtonAction(Button button, Stage stage, int gameMode) {
-        button.setOnAction(event -> {
-            try {
-                stage.setScene(MazeGameScene.create(rows, cols, stage, gameMode));
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        });
-    }
-
-    private static VBox selectLevelComboBox() {
+    private VBox selectLevelComboBox() {
         VBox vBox = new VBox();
-        Label label = new Label("Please Select a level");
+        Label label = new Label("Select a Difficulty");
 
         ComboBox level = new ComboBox();
         level.getItems().addAll("Easy", "Medium", "Hard");
-        level.setValue("Easy");//set initial state to Easy
+        level.setValue("Easy"); //set initial state to Easy
+        level.valueProperty().addListener((ChangeListener<String>) (observable, oldValue, newValue) -> {
+            rows = cols = getGridSize(newValue);
+        });
 
-        comboBoxAction(level);
-
-        level.setMaxWidth(200);
+        level.setMaxWidth(280);
 
         vBox.setSpacing(10);
         vBox.setAlignment(Pos.CENTER);
         vBox.getChildren().addAll(label, level);
-
         return vBox;
     }
 
-    private static Button createStartButton(String text, Stage stage, int gameMode) {
+    private VBox selectAlgorithmComboBox() {
+        VBox vBox = new VBox();
+        Label label = new Label("Select a Maze Generation Algorithm");
+
+        ComboBox algorithmLabel = new ComboBox();
+        algorithmLabel.getItems().addAll(DFS_LABEL, KRUSKAL_LABEL, PRIM_LABEL);
+        algorithmLabel.setValue(DFS_LABEL); //set initial state to DFS
+        algorithmLabel.valueProperty().addListener((ChangeListener<String>) (observable, oldValue, newValue) -> {
+            algorithm = getAlgorithmType(newValue);
+        });
+        algorithmLabel.setMaxWidth(280);
+
+        vBox.setSpacing(10);
+        vBox.setAlignment(Pos.CENTER);
+        vBox.getChildren().addAll(label, algorithmLabel);
+        return vBox;
+    }
+
+    private Button createStartButton(String text, Stage stage, GameMode gameMode) {
         Button button = new Button(text);
         button.setMaxWidth(200);
-        startButtonAction(button, stage, gameMode);
+        button.setOnAction(event -> {
+            stage.setScene(new MazeGameScene(rows, cols, gameMode, algorithm).create(stage));
+        });
         return button;
     }
 
-
-    public static Scene createHomePageScene(Stage stage) {
+    public Scene createHomePageScene(Stage stage) {
         stage.setTitle("Start Game");
-        rows = cols = 8;
-        VBox vBox = selectLevelComboBox();
-        Button startButton = createStartButton("Play Game", stage, PLAY);
-        Button botPlayButton = createStartButton("Bot Play", stage, BOTPLAY);
+        VBox level = selectLevelComboBox();
+
+        VBox algorithm = selectAlgorithmComboBox();
 
         VBox vBox2 = new VBox();
         vBox2.setAlignment(Pos.CENTER);
         vBox2.getStyleClass().add("VBox");
+
         HBox hBox = new HBox();
         hBox.setSpacing(50);
         hBox.setAlignment(Pos.CENTER);
         hBox.setMaxWidth(500);
+        Button startButton = createStartButton("Play Game", stage, GameMode.PLAY);
+        Button botPlayButton = createStartButton("Bot Play", stage, GameMode.BOT_PLAY);
         hBox.getChildren().addAll(startButton, botPlayButton);
 
-        vBox2.getChildren().addAll(vBox, hBox);
+        vBox2.getChildren().addAll(level, algorithm, hBox);
 
         Scene scene = new Scene(vBox2, 940, 780);
         scene.getStylesheets().add("style.css");
         return scene;
     }
 
+    public enum GameMode {
+        PLAY, BOT_PLAY;
+    }
+
+    public enum Algorithm {
+        DFS, KRUSKAL, PRIM
+    }
 }

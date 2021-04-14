@@ -8,8 +8,7 @@ import java.util.List;
 import java.util.Random;
 
 public class PrimMazeBuilder extends MazeBuilder {
-
-    boolean[][] visited;
+    private final boolean[][] visited;
 
     public PrimMazeBuilder(int rows, int cols) {
         super(rows, cols);
@@ -18,12 +17,11 @@ public class PrimMazeBuilder extends MazeBuilder {
 
     @Override
     protected boolean validCell(Cell cell) {
-        return (inBounds(cell) && !visited[cell.i][cell.j]);
+        return (board.inBounds(cell) && !visited[cell.i][cell.j]);
     }
 
     @Override
     public Board build() {
-        Board board = new Board(rows, cols);
         Random random = new Random();
 
         Cell currCell = new Cell(0, 0);
@@ -45,5 +43,4 @@ public class PrimMazeBuilder extends MazeBuilder {
         }
         return board;
     }
-
 }
