@@ -1,6 +1,7 @@
 # Maze Game
 
-JavaFX application generates Mazes using different algorithms, solves the maze using Breadth First Search algorithm and lets the user
+JavaFX application generates mazes using Randomized Iterative Depth First Search, Kruskal and Prim algorithms, solves the maze using Breadth First Search algorithm, or lets the user play
+
 play.
 
 ## Building this project ##
